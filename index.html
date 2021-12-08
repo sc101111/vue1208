@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Hahow模擬(Vue.js API串接/ RWD)</title>
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.1/css/all.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="nav" id="app1">
+  <ul class="nav_bar">
+    <li class="nav_item">
+      <img src="https://hahow.in/static/media/logo-white.2eb09c75.svg" alt="" v-if="! logo_reverse">
+      <img src="https://hahow.in/static/media/logo-black.23fa8b87.svg" alt="" v-if="logo_reverse">
+    </li>
+    <li class="nav_item discover_course">
+      <span class="fas fa-th-large nav_title"> 探索課程</span>
+      <ul class="course_type">
+        <a href="#" v-for="type in course_types"><li class="type">{{type}}</li></a>
+      </ul>
+    </li>
+    <li class="nav_item give_lecture">
+      <a href="#"><span class="fas fa-pen nav_title"> 我要開課</span></a>
+    </li>
+    <li class="nav_item search">
+      <span class="fas fa-search nav_title"></span>
+      <input type="search">
+      <span class="fas fa-times search_cancel"></span>
+      <span class="nav_title title"> 搜尋</span>
+    </li>
+  </ul>
+</div>
+
+<div class="slide_show" id="app2">
+  <div class="pages">
+    <div class="page" v-for="(slide,id) in slides">
+      <img v-bind:src="slides[id].url" alt="">
+    </div>
+  </div>
+  <div class="slide_control">
+    <div class="left">
+      <div class="fas fa-angle-left arrow"></div>
+    </div>
+    <div class="right">
+      <div class="fas fa-angle-right arrow"></div>
+    </div>
+  </div>
+  <div class="slogan_box">
+    <h1>{{main_slogan}}</h1>
+    <div class="slide_slogans">
+      <div class="slide_slogan" v-for="(slide,id) in slides">
+        <h3>{{slide.slogan}}</h3>
+        <a href="#"><div class="btn">瞭解課程內容</div></a>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<div id="app3">
+  <div class="course" v-for="(course,id) in hahow_data">
+    <div class="course_card">
+      <img v-bind:src="hahow_data[id].owner.profileImageUrl" alt="" class="teacher_img">
+      <div class="img_outter">
+        <h5 class="mode" v-if="rate[id]<100 && screenWidth>800">募集中</h5>
+        <h5 class="mode green" v-if="rate[id]>=100 && screenWidth>800">募集成功</h5>
+        <img v-bind:src="hahow_data[id].coverImage.url" alt="">
+      </div>
+      <div class="info">
+        <h3 class="title">{{course.title}}</h3>
+        <p>老師: {{course.owner.name}}
+          <span class="mode_s" v-if="rate[id]<100 && screenWidth<=800">募集中</span>
+          <span class="mode_s green" v-if="rate[id]>=100 && screenWidth<=800">募集成功</span>
+        </p>
+        <p v-if="screenWidth>800">預購價：<span class="price">{{course.price}} </span><span class="special_price">{{course.preOrderedPrice}}元</span></p>
+        <div class="progress_bar" v-if="screenWidth>800">
+          <div class="progress" v-bind:style="{width:rate[id]+'%'}"></div>
+        </div>
+        <p class="status" v-if="course.numSoldTickets<course.successCriteria.numSoldTickets && screenWidth>800">已募集 {{course.numSoldTickets}}/{{course.successCriteria.numSoldTickets}}人</p>
+        <p class="status" v-if="course.numSoldTickets >= course.successCriteria.numSoldTickets && screenWidth>800">已募集 {{rate[id]}}%</p>
+      </div>
+      <p v-if="screenWidth<=800">預購價：<span class="price">{{course.price}} </span><span class="special_price">{{course.preOrderedPrice}}元 </span>| 已募集 {{course.numSoldTickets}}/{{course.successCriteria.numSoldTickets}}人</p>
+      <div class="progress_bar" v-if="screenWidth<=800">
+        <div class="progress" v-bind:style="{width:rate[id]+'%'}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
